@@ -1,25 +1,13 @@
 import { useLayoutEffect, useRef } from "react";
 import { transposeChord } from "../utils/transpose";
 
-/* =====================================
-   CHORD DETECTOR
-   Matches: B, Am, A#m11, D#7, G#m7,
-            B/F#, Gdim, F#7, etc.
-===================================== */
-function isChordLike(text) {
-  if (!text) return false;
-
-  return /^[A-G](#|b)?(m|maj|min|dim|aug)?\d*(sus\d*)?(add\d*)?(\/[A-G](#|b)?)?$/.test(
-    text.trim()
-  );
-}
-
 export default function Word({
   slot,
   originalKey,
   targetKey,
   notation,
-  onClick
+  onClick,
+  isChordOnlyLine = false
 }) {
   const wordRef = useRef(null);
   const chordGroupRef = useRef(null);
@@ -27,14 +15,12 @@ export default function Word({
   useLayoutEffect(() => {
     if (!wordRef.current) return;
 
-    // 🔄 RESET PADDING FIRST
     wordRef.current.style.paddingLeft = "";
     wordRef.current.style.paddingRight = "";
 
     if (!slot.chords || slot.chords.length === 0) return;
     if (!chordGroupRef.current) return;
 
-    // Print-safe measurement
     const wordRect = wordRef.current.getBoundingClientRect();
     const chordRect = chordGroupRef.current.getBoundingClientRect();
 
@@ -61,14 +47,18 @@ export default function Word({
     }
   }, [slot.chords, slot.align, targetKey]);
 
-  /* =====================================
-     🔥 INLINE CHORD TRANSPOSITION
-     If the WORD ITSELF is a chord,
-     transpose it just like overhead chords
-  ===================================== */
-  const displayText = isChordLike(slot.text)
-    ? transposeChord(slot.text, originalKey, targetKey, notation)
-    : slot.text;
+  // 🔥 Transpose ONLY if whole line is chord-only
+  const transposed = transposeChord(
+    slot.text,
+    originalKey,
+    targetKey,
+    notation
+  );
+
+  const displayText =
+    isChordOnlyLine && transposed !== slot.text
+      ? transposed
+      : slot.text;
 
   return (
     <span ref={wordRef} className="word" onClick={onClick}>
