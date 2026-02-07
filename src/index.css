@@ -1,0 +1,284 @@
+/* =================================================
+   RESET + BASE
+================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b0f1a;
+  color: #e5e7eb;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+h1, h2, h3 {
+  color: #f9fafb;
+}
+
+button,
+select,
+input,
+textarea {
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* =================================================
+   UI ELEMENTS (SCREEN ONLY)
+================================================= */
+
+button {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+input,
+textarea,
+select {
+  background: #0f172a;
+  color: #e5e7eb;
+  border: 1px solid #1e293b;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.card {
+  background: #0f172a;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.song-canvas {
+  background: #020617;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: inset 0 0 0 1px #1e293b;
+}
+
+/* =================================================
+   WORD + CHORD SYSTEM
+================================================= */
+
+.word {
+  position: relative;
+  display: inline-block;
+  padding: 2px 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.word:hover {
+  background: rgba(99,102,241,0.15);
+  border-radius: 4px;
+}
+
+.chord-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1.15em;
+  pointer-events: none;
+}
+
+.chord-group {
+  display: inline-flex;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.align-start { text-align: left; }
+.align-center { text-align: center; }
+.align-end { text-align: right; }
+
+.chord {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a5b4fc;
+  white-space: nowrap;
+}
+
+/* =================================================
+   MODAL
+================================================= */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: #020617;
+  padding: 20px;
+  border-radius: 12px;
+  width: 280px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+/* =================================================
+   PRINT BASE
+================================================= */
+
+.print-root {
+  color: #000;
+  font-family: sans-serif;
+  background: #fff;
+}
+
+/* ================= HEADERS ================= */
+
+.print-header,
+.lyrics-header {
+  display: flex;
+  align-items: center;
+  gap: 8rem;
+  margin-bottom: 36px;
+}
+
+.print-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  border-bottom: 2px solid #000;
+  color: #000;
+}
+
+.lyrics-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  border-bottom: 2px solid #000;
+  color: #000;
+}
+
+.lyrics-title span {
+  font-weight: normal;
+}
+
+.print-logo {
+  height: 150px;
+}
+
+/* ================= SECTIONS (FINAL SPACING) ================= */
+
+.print-section,
+.lyrics-section {
+  margin-bottom: 72px; /* ✅ increased gap between sections */
+}
+
+.print-section-title,
+.lyrics-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777;
+  border: 1px solid #777;
+  padding: 6px 10px;
+  width: fit-content;
+  margin-bottom: 24px;
+}
+
+/* ================= PREVIEW MODE ================= */
+
+.preview-mode {
+  width: 1200px;
+  margin: 40px auto;
+  padding: 70px 50px;
+  background: #fff;
+}
+
+.preview-mode .page-header {
+  display: none;
+}
+
+/* =================================================
+   PRINT MODE
+================================================= */
+
+@media print {
+
+  @page {
+    size: A4;
+    margin: 25mm 15mm 20mm;
+  }
+
+  body {
+    margin: 0;
+    background: white;
+    color: black;
+  }
+
+  button,
+  .card,
+  .song-canvas,
+  .modal,
+  .modal-backdrop {
+    display: none !important;
+  }
+
+  .page-header {
+    position: fixed;
+    top: 10mm;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+/* =================================================
+   FORCE BLACK CHORDS IN PRINT
+================================================= */
+
+.print-root .chord,
+.print-root .chord-text,
+.print-root .above-chord,
+.print-root .chord-slot {
+  color: #000 !important;
+}
+
+/* =================================================
+   SAFE PDF INNER MARGINS
+================================================= */
+
+#print-chords,
+#print-lyrics {
+  padding: 25mm 18mm 20mm;
+}
+
+/* =================================================
+   KEEP SONG SECTIONS TOGETHER
+================================================= */
+
+.print-section,
+.lyrics-section {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.print-section-title,
+.lyrics-section-title {
+  page-break-after: avoid;
+  break-after: avoid;
+}
