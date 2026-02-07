@@ -42,6 +42,14 @@ function pitchToNote(pitch, targetKey) {
   return SHARP_SCALE[pitch];
 }
 
+// ================== CHORD SANITIZER ==================
+// Removes layout characters without touching music
+
+function sanitizeChord(chord) {
+  if (!chord) return chord;
+  return chord.trim().replace(/[\[\]]/g, "");
+}
+
 // ================== CHORD PARSER ==================
 // Issue #2 FIX: two-layer chord model
 //
