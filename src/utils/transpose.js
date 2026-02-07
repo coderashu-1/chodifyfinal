@@ -90,7 +90,9 @@ function parseChord(chord) {
 // Issue #1 + Issue #2 COMPLETE FIX
 
 export function transposeChord(chord, fromKey, toKey) {
-  const parsed = parseChord(chord);
+  const cleanChord = sanitizeChord(chord);
+
+  const parsed = parseChord(cleanChord);
   if (!parsed) return chord;
 
   const fromPitch = noteToPitch(fromKey);
